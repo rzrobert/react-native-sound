@@ -32,13 +32,13 @@ Set speed | ✓ | ✓ |
 First install the npm package from your app directory:
 
 ```javascript
-npm install react-native-sound --save
+npm install react-native-sound-tc --save
 ```
 
 Then link it automatically using:
 
 ```javascript
-react-native link react-native-sound
+react-native link react-native-sound-tc
 ```
 
 ### Manual Installation Notes
@@ -63,7 +63,7 @@ First you'll need to add audio files to your project.
 
 ```js
 // Import the react-native-sound module
-var Sound = require('react-native-sound');
+var Sound = require('react-native-sound-tc');
 
 // Enable playback in silence mode
 Sound.setCategory('Playback');
