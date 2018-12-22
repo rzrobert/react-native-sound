@@ -1,6 +1,3 @@
-// Type definitions for react-native-sound
-// Project: https://github.com/zmxv/react-native-sound
-// Definitions by: Kyle Roach <https://github.com/iRoachie>
 // TypeScript Version: 2.3.2
 
 type AVAudioSessionCategory = 'Ambient' | 'SoloAmbient' | 'Playback' | 'Record' | 'PlayAndRecord' | 'AudioProcessing' | 'MultiRoute'
