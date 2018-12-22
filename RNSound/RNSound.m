@@ -19,7 +19,7 @@
     AVAudioSessionInterruptionType audioSessionInterruptionType   = [userInfo[@"AVAudioSessionInterruptionTypeKey"] longValue];
     AVAudioPlayer* player = [self playerForKey:self._key];
     if (audioSessionRouteChangeReason == AVAudioSessionRouteChangeReasonNewDeviceAvailable){
-        if (player) {
+        if (player && player.isPlaying) {
             [player play];
         }
     }
@@ -29,8 +29,11 @@
         }
     }
     if (audioSessionRouteChangeReason == AVAudioSessionRouteChangeReasonOldDeviceUnavailable){
-        if (player) {
-            [player pause];
+        AVAudioSession *session = [AVAudioSession sharedInstance];
+        [session overrideOutputAudioPort: AVAudioSessionPortOverrideSpeaker error:nil];
+        [session setActive: YES error: nil];
+        if (player && player.isPlaying) {
+            [player play];
         }
     }
     if (audioSessionInterruptionType == AVAudioSessionInterruptionTypeBegan){
@@ -216,12 +219,14 @@ RCT_EXPORT_METHOD(prepare:(NSString*)fileName
 }
 
 RCT_EXPORT_METHOD(play:(nonnull NSNumber*)key withCallback:(RCTResponseSenderBlock)callback) {
+  [[AVAudioSession sharedInstance] overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
   [[AVAudioSession sharedInstance] setActive:YES error:nil];
   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioSessionChangeObserver:) name:AVAudioSessionRouteChangeNotification object:nil];
   self._key = key;
   AVAudioPlayer* player = [self playerForKey:key];
   if (player) {
     [[self callbackPool] setObject:[callback copy] forKey:key];
+    [self setCategory:@"Playback" mixWithOthers: NO];
     [player play];
     [self setOnPlay:YES forPlayerKey:key];
   }
